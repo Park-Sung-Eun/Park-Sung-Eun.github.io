@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 1인기업 메뉴얼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#07090F;color:#CBD5E1;
+  font-family:'DM Sans','Noto Sans KR',sans-serif;
+  overflow-x:hidden;line-height:1.6;
+}
+:root{
+  --bg:#07090F;--surface:#0D1220;--surface2:#111828;
+  --card:#121A2E;--border:rgba(37,99,235,.2);--border2:rgba(37,99,235,.38);
+  --blue:#2563EB;--blue-mid:#3B82F6;--blue-lite:#60A5FA;
+  --white:#F1F5F9;--muted:#64748B;--dim:#2D3A52;
+  --red:#EF4444;--yellow:#EAB308;--green:#22C55E;
+  --mono:'DM Mono',monospace;--serif:'Playfair Display',serif;
+}
+
+/* ── BLUEPRINT BG ── */
+.bp{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bp svg{width:100%;height:100%}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:52px;
+  background:rgba(7,9,15,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 60px;
+}
+.nav-logo{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.14em;color:var(--blue-lite);
+  display:flex;align-items:center;gap:8px;white-space:nowrap;
+}
+.ndot{width:5px;height:5px;border-radius:50%;background:var(--blue-mid);
+  box-shadow:0 0 8px var(--blue-mid);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nsep{width:1px;height:20px;background:var(--border);margin:0 24px}
+.nav-tabs{display:flex;gap:2px;flex:1}
+.nav-tab{
+  font-family:var(--mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.07em;color:var(--muted);
+  padding:5px 13px;border-radius:3px;cursor:pointer;
+  border:1px solid transparent;background:none;transition:all .18s;
+  white-space:nowrap;text-decoration:none;
+  display:flex;align-items:center;gap:5px;
+}
+.nav-tab .ti{font-size:9px;color:var(--dim)}
+.nav-tab:hover{color:var(--white);background:rgba(255,255,255,.03);border-color:var(--border)}
+.nav-tab.active{color:var(--blue-lite);background:rgba(37,99,235,.09);border-color:var(--border2)}
+.nav-tab.active .ti{color:var(--blue-mid)}
+.nav-right{font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:.1em;display:flex;align-items:center;gap:8px;margin-left:auto;}
+
+/* ── PAGE ── */
+.page{position:relative;z-index:1;padding-top:52px}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 460px;
+  align-items:center;
+  max-width:1440px;margin:0 auto;
+  padding:0 80px;position:relative;
+}
+/* HUD corners */
+.hud{position:absolute;font-family:var(--mono);font-size:9px;
+  color:rgba(37,99,235,.32);letter-spacing:.07em;line-height:1.9;}
+.hud-tl{top:28px;left:80px}.hud-tr{top:28px;right:80px;text-align:right}
+.hud-bl{bottom:32px;left:80px}.hud-br{bottom:32px;right:80px;text-align:right}
+.hud::before{content:'';display:block;width:14px;height:14px;
+  border-top:1px solid rgba(37,99,235,.26);border-left:1px solid rgba(37,99,235,.26);margin-bottom:5px;}
+.hud-tr::before,.hud-br::before{border-left:none;border-right:1px solid rgba(37,99,235,.26);margin-left:auto;}
+.hud-bl::before,.hud-br::before{border-top:none;border-bottom:1px solid rgba(37,99,235,.26);}
+
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:100px 60px 100px 0;
+}
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--blue-mid);margin-bottom:28px;
+}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--blue-mid)}
+.eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+h1.headline{
+  font-family:var(--serif);
+  font-size:clamp(54px,5vw,80px);
+  font-weight:900;line-height:1.06;letter-spacing:-.025em;
+  color:var(--white);margin-bottom:24px;
+}
+h1.headline .acc{color:var(--blue-mid)}
+
+.hero-desc{
+  font-size:15px;font-weight:300;color:var(--muted);
+  line-height:1.78;max-width:480px;
+}
+.hero-desc strong{color:#94A3B8;font-weight:400}
+
+/* ── HERO IMAGE ── */
+.hero-right{
+  display:flex;align-items:center;justify-content:center;
+  border-left:1px solid var(--border);
+  padding:48px 40px;
+  min-height:100vh;
+}
+.hero-img-wrap{
+  width:100%;max-width:380px;
+  position:relative;
+}
+.hero-img-wrap img{
+  width:100%;height:auto;display:block;
+  border-radius:4px;
+  /* 검정 배경 이미지라 그대로 자연스럽게 합성 */
+  mix-blend-mode:lighten;
+}
+/* 이미지 주변 블루프린트 코너 마커 */
+.hero-img-wrap::before,.hero-img-wrap::after{
+  content:'';position:absolute;width:20px;height:20px;
+}
+.hero-img-wrap::before{
+  top:-6px;left:-6px;
+  border-top:1px solid rgba(37,99,235,.5);
+  border-left:1px solid rgba(37,99,235,.5);
+}
+.hero-img-wrap::after{
+  bottom:-6px;right:-6px;
+  border-bottom:1px solid rgba(37,99,235,.5);
+  border-right:1px solid rgba(37,99,235,.5);
+}
+
+/* ── CONTENT WRAP ── */
+.cw{max-width:1440px;margin:0 auto;padding:0 80px;position:relative;z-index:1;}
+.sec-rule{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
+
+.sec-block{padding:72px 0}
+.sec-ey{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--blue-mid);margin-bottom:10px;
+}
+.sec-ey::before{content:'';width:20px;height:1px;background:var(--border2)}
+.sec-h{font-size:22px;font-weight:400;color:var(--white);margin-bottom:6px;line-height:1.3}
+.sec-s{font-size:13px;color:var(--muted);margin-bottom:32px;max-width:560px;line-height:1.7}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:28px 24px;position:relative;overflow:hidden;transition:border-color .2s;
+}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--blue);opacity:0;transition:opacity .2s;}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card:hover::before{opacity:1}
+.stat-card::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(37,99,235,.07) 0%,transparent 65%);pointer-events:none;}
+.snum{font-family:var(--mono);font-size:44px;font-weight:500;line-height:1;margin-bottom:10px;display:block;}
+.slbl{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px}
+.ssrc{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.04em}
+
+/* ── MIRROR BAR ── */
+.mirror-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:28px 32px;position:relative;margin-bottom:0;
+}
+.hix-tag{
+  position:absolute;top:12px;right:12px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;
+  color:var(--yellow);background:rgba(234,179,8,.07);
+  border:1px solid rgba(234,179,8,.2);padding:3px 9px;border-radius:3px;
+}
+.mlbl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;}
+.mbars{display:flex;height:64px;margin-bottom:10px;}
+.ms{flex:1;display:flex;align-items:center;position:relative;overflow:hidden;border-radius:4px;}
+.ms.l{justify-content:flex-end;padding-right:16px;background:rgba(100,116,139,.08);border-radius:4px 0 0 4px;}
+.ms.r{justify-content:flex-start;padding-left:16px;background:rgba(37,99,235,.06);border-radius:0 4px 4px 0;}
+.mf{position:absolute;top:0;bottom:0;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1);}
+.ms.l .mf{right:0;background:rgba(100,116,139,.22);border-radius:4px 0 0 4px;}
+.ms.r .mf{left:0;background:rgba(37,99,235,.18);border-radius:0 4px 4px 0;transition-delay:.15s;}
+.mdiv{width:2px;background:var(--border2);flex-shrink:0;z-index:2;}
+.mv{font-family:var(--mono);font-size:28px;font-weight:500;position:relative;z-index:1;}
+.mgap{text-align:center;font-family:var(--mono);font-size:10px;color:var(--blue-lite);
+  letter-spacing:.06em;padding-top:8px;border-top:1px solid var(--border);}
+
+/* ── CASE CARDS (이미지 포함) ── */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.case-card{
+  background:var(--card);border:1px solid rgba(239,68,68,.2);
+  border-radius:8px;overflow:hidden;transition:border-color .2s;
+  display:flex;flex-direction:column;
+}
+.case-card:hover{border-color:rgba(239,68,68,.4)}
+.case-card::before{content:'';display:block;height:1px;
+  background:linear-gradient(90deg,var(--red),transparent);opacity:.6;}
+/* 이미지 영역 */
+.case-img{
+  width:100%;height:220px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  background:#fff;  /* 흰배경 이미지용 */
+  border-bottom:1px solid rgba(239,68,68,.15);
+  position:relative;
+}
+.case-img img{
+  width:100%;height:100%;
+  object-fit:contain;
+  padding:16px;
+}
+/* 흰배경을 다크테마에 자연스럽게 — 오버레이로 살짝 어둡게 */
+.case-img::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(7,9,15,.12);
+  pointer-events:none;
+}
+.case-body-wrap{padding:22px 24px;flex:1;display:flex;flex-direction:column;}
+.case-badge{
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+  color:var(--red);background:rgba(239,68,68,.07);
+  border:1px solid rgba(239,68,68,.2);padding:3px 8px;border-radius:3px;
+  display:inline-block;margin-bottom:12px;align-self:flex-start;
+}
+.case-title{font-size:15px;font-weight:500;color:var(--white);margin-bottom:8px;}
+.case-body{font-size:13px;color:#94A3B8;line-height:1.65;margin-bottom:12px;flex:1;}
+.case-foot{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.04em;}
+
+/* ── DIAGNOSIS ── */
+.diag-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:32px 36px;
+}
+.diag-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;}
+.diag-h{font-size:18px;font-weight:400;color:var(--white);margin-bottom:4px;}
+.diag-s{font-size:12px;color:var(--muted);}
+.dcnt{font-family:var(--mono);font-size:26px;font-weight:500;
+  color:var(--dim);text-align:right;line-height:1;transition:color .3s;}
+.dcnt small{font-size:11px;color:var(--dim);display:block;margin-top:3px;letter-spacing:.04em;}
+.dlist{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+.di{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.02);border:1px solid var(--border);
+  border-radius:6px;padding:14px 18px;cursor:pointer;
+  transition:all .18s;user-select:none;
+}
+.di:hover{border-color:var(--border2);background:rgba(37,99,235,.04)}
+.di.on{border-color:rgba(37,99,235,.38);background:rgba(37,99,235,.08)}
+.dcb{width:18px;height:18px;border:1px solid var(--dim);border-radius:3px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;transition:all .15s;}
+.di.on .dcb{background:var(--blue);border-color:var(--blue);color:#fff;}
+.dtxt{font-size:13px;color:#94A3B8;line-height:1.4;transition:color .15s;}
+.di.on .dtxt{color:var(--white);}
+.dres{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 20px;border-radius:6px;
+  border:1px solid var(--border);background:rgba(255,255,255,.02);transition:all .3s;
+}
+.rbadge{
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.08em;
+  padding:6px 14px;border-radius:3px;flex-shrink:0;white-space:nowrap;
+  border:1px solid var(--dim);color:var(--dim);transition:all .3s;
+}
+.rmsg{font-size:13px;color:var(--muted);line-height:1.5;transition:all .3s;}
+.rmsg strong{font-weight:500;}
+
+/* ── NEXT CTA ── */
+.next-wrap{
+  padding:48px 0 80px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+}
+.nlbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);
+  margin-bottom:8px;text-transform:uppercase;}
+.nh{font-size:20px;font-weight:400;color:var(--white);margin-bottom:4px;}
+.ns{font-size:13px;color:var(--muted);}
+.btn-next{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--blue);color:#fff;
+  font-family:'DM Sans','Noto Sans KR',sans-serif;
+  font-size:13px;font-weight:500;padding:13px 26px;border-radius:4px;
+  border:none;cursor:pointer;text-decoration:none;
+  letter-spacing:.02em;transition:all .2s;white-space:nowrap;
+}
+.btn-next:hover{background:#1D4ED8;transform:translateY(-1px)}
+.btn-next svg{transition:transform .2s}
+.btn-next:hover svg{transform:translateX(3px)}
+
+/* ── PLACEHOLDER ── */
+.ph{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  border-top:1px solid var(--border);opacity:.22;padding:60px;
+}
+.ph-s{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  color:var(--blue-mid);margin-bottom:16px;text-transform:uppercase;}
+.ph-h{font-size:30px;font-weight:300;color:var(--white);line-height:1.3;}
+.ph-n{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:14px;letter-spacing:.06em;}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);padding:22px 80px;
+  font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.07em;
+  display:flex;justify-content:space-between;position:relative;z-index:1;
+}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease;}
+.rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- BLUEPRINT BG -->
+<div class="bp">
+<svg viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="gs" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(37,99,235,.055)" stroke-width=".5"/>
+    </pattern>
+    <pattern id="gl" width="200" height="200" patternUnits="userSpaceOnUse">
+      <path d="M200 0H0V200" fill="none" stroke="rgba(37,99,235,.09)" stroke-width=".8"/>
+    </pattern>
+  </defs>
+  <rect width="1440" height="900" fill="url(#gs)"/>
+  <rect width="1440" height="900" fill="url(#gl)"/>
+  <line x1="80" y1="80" x2="80" y2="820" stroke="rgba(37,99,235,.09)" stroke-width=".8" stroke-dasharray="4 7"/>
+  <line x1="1360" y1="80" x2="1360" y2="820" stroke="rgba(37,99,235,.09)" stroke-width=".8" stroke-dasharray="4 7"/>
+  <line x1="80" y1="80" x2="1360" y2="80" stroke="rgba(37,99,235,.08)" stroke-width=".8" stroke-dasharray="4 7"/>
+  <line x1="80" y1="820" x2="1360" y2="820" stroke="rgba(37,99,235,.08)" stroke-width=".8" stroke-dasharray="4 7"/>
+  <line x1="77" y1="80" x2="83" y2="80" stroke="rgba(37,99,235,.28)" stroke-width="1"/>
+  <line x1="77" y1="820" x2="83" y2="820" stroke="rgba(37,99,235,.28)" stroke-width="1"/>
+  <line x1="1357" y1="80" x2="1363" y2="80" stroke="rgba(37,99,235,.28)" stroke-width="1"/>
+  <line x1="1357" y1="820" x2="1363" y2="820" stroke="rgba(37,99,235,.28)" stroke-width="1"/>
+  <text x="720" y="73" font-family="DM Mono,monospace" font-size="9" fill="rgba(37,99,235,.22)" text-anchor="middle" letter-spacing="2">1440 px</text>
+  <text x="68" y="454" font-family="DM Mono,monospace" font-size="9" fill="rgba(37,99,235,.2)" text-anchor="middle" transform="rotate(-90 68 454)" letter-spacing="2">900 px</text>
+  <circle cx="80" cy="80" r="2.5" fill="none" stroke="rgba(37,99,235,.32)" stroke-width="1"/>
+  <circle cx="1360" cy="80" r="2.5" fill="none" stroke="rgba(37,99,235,.32)" stroke-width="1"/>
+  <circle cx="80" cy="820" r="2.5" fill="none" stroke="rgba(37,99,235,.32)" stroke-width="1"/>
+  <circle cx="1360" cy="820" r="2.5" fill="none" stroke="rgba(37,99,235,.32)" stroke-width="1"/>
+  <line x1="700" y1="450" x2="740" y2="450" stroke="rgba(37,99,235,.13)" stroke-width=".8"/>
+  <line x1="720" y1="430" x2="720" y2="470" stroke="rgba(37,99,235,.13)" stroke-width=".8"/>
+  <circle cx="720" cy="450" r="16" fill="none" stroke="rgba(37,99,235,.08)" stroke-width=".8"/>
+  <circle cx="720" cy="450" r="2" fill="rgba(37,99,235,.2)"/>
+  <path d="M1080 60 L1180 60 L1180 130 L1270 130" fill="none" stroke="rgba(37,99,235,.12)" stroke-width=".8"/>
+  <circle cx="1080" cy="60" r="2.5" fill="none" stroke="rgba(37,99,235,.26)" stroke-width=".8"/>
+  <circle cx="1270" cy="130" r="2.5" fill="rgba(37,99,235,.16)"/>
+  <path d="M170 860 L310 860 L310 800 L420 800" fill="none" stroke="rgba(37,99,235,.09)" stroke-width=".8"/>
+  <circle cx="170" cy="860" r="2.5" fill="none" stroke="rgba(37,99,235,.2)" stroke-width=".8"/>
+  <text x="90" y="95" font-family="DM Mono,monospace" font-size="8" fill="rgba(37,99,235,.2)" letter-spacing="1">X:0000 Y:0000</text>
+  <text x="1200" y="95" font-family="DM Mono,monospace" font-size="8" fill="rgba(37,99,235,.2)" letter-spacing="1">X:1440 Y:0000</text>
+  <text x="90" y="812" font-family="DM Mono,monospace" font-size="8" fill="rgba(37,99,235,.2)" letter-spacing="1">X:0000 Y:0900</text>
+  <text x="1352" y="450" font-family="DM Mono,monospace" font-size="8" fill="rgba(37,99,235,.16)" text-anchor="middle" transform="rotate(90 1352 450)" letter-spacing="2">SECTION · PRE-CHECK</text>
+</svg>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo"><div class="ndot"></div>AI 1인기업 메뉴얼</div>
+  <div class="nsep"></div>
+  <div class="nav-tabs">
+    <a class="nav-tab active" href="#entry"><span class="ti">00</span>사전 체크</a>
+    <a class="nav-tab" href="#step01"><span class="ti">01</span>IP 자산 파악</a>
+    <a class="nav-tab" href="#step02"><span class="ti">02</span>도구 선택</a>
+    <a class="nav-tab" href="#step03"><span class="ti">03</span>실전 작업</a>
+    <a class="nav-tab" href="#step04"><span class="ti">04</span>결과 검증</a>
+    <a class="nav-tab" href="#step05"><span class="ti">05</span>최종 점검</a>
+  </div>
+  <div class="nav-right"><div class="ndot"></div>SYSTEM ACTIVE</div>
+</nav>
+
+<div class="page">
+
+<!-- ══ HERO ══ -->
+<section id="entry" class="hero">
+  <div class="hud hud-tl">SECTION 00<br>PRE-CHECK<br>IP RISK AUDIT</div>
+  <div class="hud hud-tr">AI 사용 전 단계<br>권장 5분 소요<br>총 5문항</div>
+  <div class="hud hud-bl">PARK SUNG EUN<br>DATA VIZ PROJECT</div>
+  <div class="hud hud-br">STEP 00 / 05<br>ENTRY POINT</div>
+
+  <div class="hero-left">
+    <div class="eyebrow rv">사전 체크 · AI 사용 전 현황 파악</div>
+    <h1 class="headline rv" style="transition-delay:.1s">
+      당신의<br>아이디어,<br>지금 <span class="acc">도둑맞고</span><br>있을 수 있습니다.
+    </h1>
+    <p class="hero-desc rv" style="transition-delay:.2s">
+      <strong>디자이너, 개발자, 창작자</strong> — AI로 일하는 1인기업인이라면 지금 이 순간에도 당신의 IP가 위험에 노출돼 있습니다. 아래 실제 데이터와 사례를 확인하고, 자가진단까지 마치세요.
+    </p>
+  </div>
+
+  <!-- 히어로 이미지 (1번: 도둑+아이디어 — 블랙 배경) -->
+  <div class="hero-right rv" style="transition-delay:.15s">
+    <div class="hero-img-wrap">
+      <img src="img_hero.png" alt="아이디어 도둑 일러스트">
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTENT ══ -->
+<div class="cw">
+
+  <div class="sec-rule"></div>
+
+  <!-- STAT + MIRROR -->
+  <div class="sec-block">
+    <div class="sec-ey rv">데이터 · 2024 실제 수치</div>
+    <div class="sec-h rv" style="transition-delay:.05s">지금 이 순간에도 침해가 일어나고 있습니다</div>
+    <div class="sec-s rv" style="transition-delay:.1s">아래 수치는 추정이 아닙니다. 2024년 국가기관이 공식 집계한 실제 데이터입니다.</div>
+    <div class="stat-row rv" style="transition-delay:.15s">
+      <div class="stat-card">
+        <span class="snum" style="color:var(--red)" id="cnt1">0</span>
+        <div class="slbl">2024년 국내 저작권 위반 사건<br>전년 대비 급증률</div>
+        <div class="ssrc">국가지식재산위원회 2024 연차보고서</div>
+      </div>
+      <div class="stat-card">
+        <span class="snum" style="color:var(--red)" id="cnt2">0</span>
+        <div class="slbl">2024년 경찰청 저작권법<br>위반 사건 접수 총건수</div>
+        <div class="ssrc">국가지식재산위원회 2024 연차보고서</div>
+      </div>
+      <div class="stat-card">
+        <span class="snum" style="color:var(--blue-mid)" id="cnt3">0</span>
+        <div class="slbl">전 세계 소비자 중<br>AI 서비스 사용 비율 (2025)</div>
+        <div class="ssrc">Elfsight / SQ Magazine 2025</div>
+      </div>
+    </div>
+
+    <div class="mirror-card rv" style="transition-delay:.2s">
+      <div class="hix-tag">힉스필드 교체 예정</div>
+      <div class="mlbl">
+        <span>인식률 — AI를 쓴다고 생각하는 비율</span>
+        <span style="color:var(--blue-lite)">실제 사용률</span>
+      </div>
+      <div class="mbars" id="mBars">
+        <div class="ms l"><div class="mf" id="mfl"></div><span class="mv" style="color:var(--muted)">33%</span></div>
+        <div class="mdiv"></div>
+        <div class="ms r"><div class="mf" id="mfr"></div><span class="mv" style="color:var(--blue-lite)">77%</span></div>
+      </div>
+      <div class="mgap">← 44%p 인식 격차 존재 · IP 위험 인식도 동일한 패턴 →</div>
+    </div>
+  </div>
+
+  <div class="sec-rule"></div>
+
+  <!-- CASE CARDS (이미지 포함) -->
+  <div class="sec-block">
+    <div class="sec-ey rv">실제 사례 · 2025</div>
+    <div class="sec-h rv" style="transition-delay:.05s">대기업도 당하는 IP 침해</div>
+    <div class="sec-s rv" style="transition-delay:.1s">IP 침해는 먼 이야기가 아닙니다. 지금 이 순간에도 소송이 진행 중입니다.</div>
+    <div class="case-grid rv" style="transition-delay:.15s">
+
+      <!-- 사례 1: 방송 3사 vs 네이버 (3번 이미지) -->
+      <div class="case-card">
+        <div class="case-img">
+          <img src="img_naver.png" alt="방송3사 vs 네이버 소송 일러스트">
+        </div>
+        <div class="case-body-wrap">
+          <div class="case-badge">REAL CASE · 2025.01.13</div>
+          <div class="case-title">방송 3사 vs 네이버</div>
+          <div class="case-body">SBS·MBC·KBS 3사, 네이버를 서울중앙지법 제소. 생성형 AI 학습을 위해 뉴스 데이터를 무단 활용했다는 주장. 아시아 최초 AI 학습 데이터 저작권 소송으로 기록됐습니다.</div>
+          <div class="case-foot">진행 중 · 2025.01.13 제소 · 한국저작권위원회</div>
+        </div>
+      </div>
+
+      <!-- 사례 2: 오케이툰 (2번 이미지) -->
+      <div class="case-card">
+        <div class="case-img">
+          <img src="img_oktoon.png" alt="오케이툰 저작권 침해 일러스트">
+        </div>
+        <div class="case-body-wrap">
+          <div class="case-badge">REAL CASE · 2025</div>
+          <div class="case-title">오케이툰 웹툰 저작권 침해</div>
+          <div class="case-body">웹툰 1만 개·80만 회차 무단 침해. 업계 피해 최대 494억 원 추산. 1인 창작자의 콘텐츠도 동일하게 피해 대상입니다. 창작물이 있다면 누구나 위험합니다.</div>
+          <div class="case-foot">재판 진행 중 · 피해 추산 최대 494억 원 · 법무법인 대륜</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sec-rule"></div>
+
+  <!-- DIAGNOSIS -->
+  <div class="sec-block" id="precheck">
+    <div class="sec-ey rv">사전 체크 · 자가진단</div>
+    <div class="sec-h rv" style="transition-delay:.05s">지금 내 IP 위험도를 확인하세요</div>
+    <div class="sec-s rv" style="transition-delay:.1s">해당하는 항목을 선택하면 위험도가 즉시 표시됩니다. 체크 결과에 따라 이 지침서의 우선순위가 달라집니다.</div>
+    <div class="diag-card rv" style="transition-delay:.15s">
+      <div class="diag-top">
+        <div>
+          <div class="diag-h">IP 위험도 자가진단</div>
+          <div class="diag-s">해당 항목을 모두 체크하세요</div>
+        </div>
+        <div class="dcnt" id="dCnt">0<small>/ 5 체크</small></div>
+      </div>
+      <div class="dlist">
+        <div class="di" onclick="tog(this)"><div class="dcb">✓</div><div class="dtxt">계약서 없이 클라이언트에게 결과물을 넘긴 적이 있다</div></div>
+        <div class="di" onclick="tog(this)"><div class="dcb">✓</div><div class="dtxt">AI로 만든 결과물을 저작권이 있다고 생각하고 상업적으로 사용했다</div></div>
+        <div class="di" onclick="tog(this)"><div class="dcb">✓</div><div class="dtxt">내 사업명·로고를 상표 등록하지 않은 상태다</div></div>
+        <div class="di" onclick="tog(this)"><div class="dcb">✓</div><div class="dtxt">경쟁사가 내 아이디어와 유사한 제품을 내도 대응 방법을 모른다</div></div>
+        <div class="di" onclick="tog(this)"><div class="dcb">✓</div><div class="dtxt">외주 계약에서 IP 귀속이 누구에게 있는지 불분명한 계약을 한 적 있다</div></div>
+      </div>
+      <div class="dres" id="dRes">
+        <div class="rbadge" id="rBadge">— / 5</div>
+        <div class="rmsg" id="rMsg">항목을 선택하면 IP 위험도가 표시됩니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT CTA -->
+  <div class="next-wrap rv">
+    <div>
+      <div class="nlbl">다음 단계</div>
+      <div class="nh">STEP 01 — AI 켜기 전 체크</div>
+      <div class="ns">내 직군에 어떤 IP가 있는지, AI를 쓰기 전에 반드시 알아야 할 저작권 현황</div>
+    </div>
+    <a class="btn-next" href="#step01">
+      STEP 01 시작하기
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+</div><!-- /cw -->
+
+<div class="ph" id="step01">
+  <div class="ph-s">STEP 01 · AI 켜기 전 체크</div>
+  <div class="ph-h">IP 자산 파악하기<br>— 내 직군의 IP는 무엇인가</div>
+  <div class="ph-n">제작 예정</div>
+</div>
+
+</div><!-- /page -->
+
+<footer>
+  <span>PARK SUNG EUN · 데이터 시각화와 정보디자인</span>
+  <span>AI 1인기업 메뉴얼 · IP WORKFLOW BLUEPRINT</span>
+</footer>
+
+<script>
+/* REVEAL */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})
+},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* COUNTER */
+function cUp(el,target,sfx,dur,delay){
+  setTimeout(()=>{
+    let v=0,step=target/(dur/16);
+    const t=setInterval(()=>{
+      v=Math.min(v+step,target);
+      el.textContent=(target>999?Math.floor(v).toLocaleString('ko-KR'):Math.floor(v))+sfx;
+      if(v>=target)clearInterval(t);
+    },16);
+  },delay);
+}
+const sObs=new IntersectionObserver(es=>{
+  if(es[0].isIntersecting){
+    cUp(document.getElementById('cnt1'),222,'%',1400,0);
+    cUp(document.getElementById('cnt2'),59565,'건',1800,200);
+    cUp(document.getElementById('cnt3'),86,'%',1200,400);
+    sObs.disconnect();
+  }
+},{threshold:.3});
+const sr=document.querySelector('.stat-row');
+if(sr)sObs.observe(sr);
+
+/* MIRROR */
+const mObs=new IntersectionObserver(es=>{
+  if(es[0].isIntersecting){
+    setTimeout(()=>{
+      document.getElementById('mfl').style.width='33%';
+      document.getElementById('mfr').style.width='77%';
+    },300);
+    mObs.disconnect();
+  }
+},{threshold:.3});
+const mb=document.getElementById('mBars');
+if(mb)mObs.observe(mb);
+
+/* DIAGNOSIS */
+function tog(el){
+  el.classList.toggle('on');
+  const n=document.querySelectorAll('.di.on').length;
+  document.getElementById('dCnt').innerHTML=n+'<small>/ 5 체크</small>';
+  const b=document.getElementById('rBadge');
+  const m=document.getElementById('rMsg');
+  const r=document.getElementById('dRes');
+  if(n===0){
+    b.style.cssText='border:1px solid var(--dim);color:var(--dim)';
+    b.textContent='— / 5';m.innerHTML='항목을 선택하면 IP 위험도가 표시됩니다.';
+    r.style.borderColor='var(--border)';
+  }else if(n<=2){
+    b.style.cssText='background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.28);color:#22C55E';
+    b.textContent='SAFE · '+n+'/5';
+    m.innerHTML='<strong style="color:var(--white);font-weight:500">현재 IP 관리 양호.</strong> 이 지침서로 남은 리스크를 보완하세요.';
+    r.style.borderColor='rgba(34,197,94,.2)';
+  }else if(n<=3){
+    b.style.cssText='background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.28);color:#EAB308';
+    b.textContent='WARNING · '+n+'/5';
+    m.innerHTML='<strong style="color:var(--white);font-weight:500">위험 구간 존재.</strong> STEP 01부터 순서대로 따라가면 해결됩니다.';
+    r.style.borderColor='rgba(234,179,8,.2)';
+  }else{
+    b.style.cssText='background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.28);color:#EF4444';
+    b.textContent='DANGER · '+n+'/5';
+    m.innerHTML='<strong style="color:var(--white);font-weight:500">즉시 점검 필요.</strong> 지금 바로 STEP 01을 시작하세요.';
+    r.style.borderColor='rgba(239,68,68,.2)';
+  }
+}
+
+/* NAV ACTIVE */
+const allS=document.querySelectorAll('section[id],div[id^="step"]');
+const tabs=document.querySelectorAll('.nav-tab');
+const nObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      tabs.forEach(t=>t.classList.remove('active'));
+      const a=document.querySelector(`.nav-tab[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{threshold:.35});
+allS.forEach(s=>nObs.observe(s));
+</script>
+</body>
+</html>
